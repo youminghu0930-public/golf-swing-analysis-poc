@@ -83,8 +83,9 @@ function addShade(viewport, entry, side) {
       maskContext.globalCompositeOperation = 'lighten';
       const radius = Math.max(entry.width, entry.height) / 32;
       for (const [i, model] of ['after'].entries()) {
-        if (viewport.closest('.comparison-panel').dataset[i ? 'hideAfter' : 'hideBefore'] === 'true') continue;
-        const points = trajectoryPoints(entry.trajectories[model], entry.joints[0]);
+        if (viewport.closest('.comparison-panel').dataset.hideAfter === 'true') continue;
+        for (const joint of entry.joints) {
+        const points = trajectoryPoints(entry.trajectories[model], joint);
         let previous;
         for (const point of points) {
           if (point && previous) {
@@ -98,6 +99,7 @@ function addShade(viewport, entry, side) {
         }
         const head = points.at(-1);
         if (head) { maskContext.fillStyle = '#fff'; maskContext.beginPath(); maskContext.arc(head.x, head.y, radius, 0, Math.PI*2); maskContext.fill(); }
+        }
       }
       const pixels = maskContext.getImageData(0, 0, mask.width, mask.height);
       for (let i = 0; i < pixels.data.length; i += 4) pixels.data[i+3] = pixels.data[i];
@@ -152,7 +154,6 @@ export async function mountSnapshots(root, copy, {warmAfter=Promise.resolve(),on
     const card = make('article', undefined, 'snapshot-card');
     card.setAttribute('aria-label', format(labels.itemLabel, { video: entry.videoId, frame: displayFrame }));
     const header = make('div', undefined, 'snapshot-card-header');
-    header.append(make('strong', format(copy.clipLabel, { id: entry.videoId })), make('span', format(labels.frame, { frame: displayFrame })));
     if (entry.title) header.append(make('h4', entry.title, 'snapshot-sample-title'));
     const comparison = make('div', undefined, 'snapshot-comparison');
     const viewports = [], scenes = [], overlays = [], shades = [], panels = [], callouts = [];
@@ -192,7 +193,7 @@ export async function mountSnapshots(root, copy, {warmAfter=Promise.resolve(),on
     }
     const defaultFocus = () => {
       if (entry.range && entry.trajectories) {
-        const points = ['after'].flatMap(side => trajectoryPoints(entry.trajectories[side], entry.joints[0]).filter(Boolean));
+        const points = entry.joints.flatMap(joint => trajectoryPoints(entry.trajectories.after, joint).filter(Boolean));
         const pose = { joints: points.map((_, i) => `golf_club_path_${i}`), pred: [points.map(p => [p.x, p.y, 1])] };
         return skeletonView({ pose, width: entry.width, height: entry.height, viewportWidth: viewports[0].clientWidth, viewportHeight: viewports[0].clientHeight });
       }
@@ -285,6 +286,7 @@ export async function mountSnapshots(root, copy, {warmAfter=Promise.resolve(),on
       });
       return loading;
     });
+    if (entry.title) card.append(header);
     card.append(comparison); stage.append(card);
     return card;
   });

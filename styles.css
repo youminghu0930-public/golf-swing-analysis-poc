@@ -464,3 +464,4 @@ a.project-card:focus-visible { outline:2px solid var(--accent); outline-offset:4
  .project-copy h3 { font-size:16px; }
  .project-copy p { font-size:14px; line-height:1.55; }
 }
+

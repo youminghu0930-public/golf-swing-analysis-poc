@@ -1,11 +1,63 @@
 {
-    "0026-2": [
-        {
-            "range": [
-                130,
-                150
-            ],
-            "joints": ["golf_club_head"]
-        }
-    ]
+  "0026-2": [
+    {
+      "title": "Smooth wrist and club motion from downswing to follow-through",
+      "range": [
+        130,
+        150
+      ],
+      "joints": [
+        "right_wrist",
+        "golf_club_head"
+      ]
+    }
+  ],
+  "0000": [
+    {
+      "title": "Reconstructing the club trajectory beyond the frame",
+      "range": [
+        0,
+        150
+      ],
+      "joints": [
+        "golf_club_head"
+      ]
+    }
+  ],
+  "0003": [
+    {
+      "title": "Consistent club motion through body occlusion",
+      "range": [
+        97,
+        107
+      ],
+      "joints": [
+        "golf_club_head"
+      ]
+    }
+  ],
+  "0029": [
+    {
+      "title": "Smoother club motion while preserving the impact transition",
+      "range": [
+        174,
+        192
+      ],
+      "joints": [
+        "golf_club_head"
+      ]
+    }
+  ],
+  "0025-2": [
+    {
+      "title": "Stable wrist tracking across successive frames",
+      "range": [
+        102,
+        180
+      ],
+      "joints": [
+        "right_wrist"
+      ]
+    }
+  ]
 }

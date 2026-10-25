@@ -19,7 +19,8 @@ if (!built) fs.watch(path.join(root, 'materials/data'), { recursive: true }, (_,
   if (!['catalog.json','snapshot-catalog.json'].includes(file) && !file.startsWith('.generated')) dirty = true;
 });
 if (!built) {
-  fs.watch(path.join(root,'materials/content.json'),()=>{dirty=true;});
+  // Watch the directory so editors that replace content.json atomically are detected.
+  fs.watch(path.join(root,'materials'),(_,filename)=>{if(String(filename)==='content.json') dirty=true;});
   const catalog=prepareData(root);dirty=false;
   console.log(`Prepared ${catalog.snapshots.length} snapshot images and ${catalog.clips.length} videos.`);
 }

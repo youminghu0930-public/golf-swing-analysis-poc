@@ -14,7 +14,7 @@ Open http://127.0.0.1:8005. An optional numeric argument changes the port.
 
 ## Materials
 
-- `materials/content.json`: all page copy, sections, navigation labels, project links, and banner settings.
+- `materials/content.json`: all page copy, sections, navigation labels, project links, and banner settings. Set `page.banner.video` to an existing catalog key such as `down-the-line-0024` (view and ID must match the source folders). Changing it regenerates the banner video, poster, and pose data on the next page refresh; invalid keys report an error.
 - `materials/data/vidoes/{view}/{id}.MP4`: original footage (existing folder spelling preserved).
 - `materials/data/poses/{view}/{id}.json`: one pose prediction set per clip.
 - `materials/data/snapshot.json`: curated snapshots, e.g. `{"0026-2":[{"range":[130,150],"joints":["golf_club_head"]}]}`. Ranges are inclusive, zero-based; `highlight_index` optionally selects the background frame. Every selected joint receives a trail.

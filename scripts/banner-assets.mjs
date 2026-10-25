@@ -7,7 +7,12 @@ import { execFileSync } from 'node:child_process';
 export function prepareBanner(root, clips, settings) {
   if (!settings?.video || settings.enabled === false) return null;
   const matches = clips.filter(clip => clip.key === settings.video || clip.id === settings.video);
-  if (matches.length !== 1) return null;
+  if (matches.length !== 1) {
+    const id=settings.video.replace(/^(face-on|down-the-line)-/,'');
+    const alternatives=clips.filter(clip=>clip.id===id).map(clip=>clip.key);
+    const hint=alternatives.length ? ` Available matching clip: ${alternatives.join(', ')}.` : ' Check materials/data/vidoes and the corresponding pose file.';
+    throw new Error(`Banner video "${settings.video}" must match exactly one available clip; found ${matches.length}.${hint}`);
+  }
   const clip = matches[0];
   const startFrame = Math.max(0, Math.min(clip.frameCount-1, Math.floor(Number(settings.startFrame) || 1)-1));
   const source = path.join(root, clip.video);

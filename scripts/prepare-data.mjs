@@ -97,10 +97,8 @@ export function prepareData(root = projectRoot, { probe = probeVideo, preview = 
     } catch (error) { warn(`Snapshot configuration: ${error.message}`); }
   }
   const catalog = { models, clips, snapshots };
-  try {
-    const contentFile = path.join(root, 'materials/content.json');
-    if (fs.existsSync(contentFile)) catalog.banner = prepareBanner(root, clips, read(contentFile).page?.banner);
-  } catch (error) { warn(`Banner preview unavailable: ${error.message}`); }
+  const contentFile = path.join(root, 'materials/content.json');
+  if (fs.existsSync(contentFile)) catalog.banner = prepareBanner(root, clips, read(contentFile).page?.banner);
   const snapshotCatalog = { models, clips: clips.map(({id,key,view,width,height,frameCount})=>({id,key,view,width,height,frameCount})), snapshots };
   fs.writeFileSync(path.join(root,'materials/data/snapshot-catalog.json'),JSON.stringify(snapshotCatalog));
   fs.writeFileSync(path.join(root, 'materials/data/catalog.json'), JSON.stringify(catalog));
