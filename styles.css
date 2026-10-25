@@ -455,3 +455,12 @@ a.project-card:focus-visible { outline:2px solid var(--accent); outline-offset:4
 .project-cards { grid-auto-rows:1fr; }
 
 @media(max-width:360px) { .hero h1 {font-size:28px;overflow-wrap:anywhere;} .hero .eyebrow {overflow-wrap:anywhere;} }
+
+/* On phones the square media spans the card, with readable copy beneath it. */
+@media(max-width:650px) {
+ .project-card { grid-template-columns:minmax(0,1fr); grid-template-rows:auto 1fr; }
+ .project-card .project-preview { width:100%; height:auto; aspect-ratio:1; align-self:start; }
+ .project-copy { padding:16px; }
+ .project-copy h3 { font-size:16px; }
+ .project-copy p { font-size:14px; line-height:1.55; }
+}

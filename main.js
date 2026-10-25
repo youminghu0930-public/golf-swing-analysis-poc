@@ -150,7 +150,7 @@ async function renderPage() {
         demos.push({ demo: snapshots, copy, modulePath: './snapshot-viewer.js', mount: 'mountSnapshots', error: copy.snapshots.error });
       }
       if(content.id==='result') {
-        section.append(element('h3',copy.videoTitle,'result-subheading'));
+
         const demo = element('div', undefined, 'demo');
         const loading = element('p', copy.loadingDemo, 'demo-loading');
         loading.setAttribute('role', 'status');

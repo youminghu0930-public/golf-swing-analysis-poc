@@ -1,3 +1,4 @@
+import { loadVideoFrame } from './media-loader.js';
 import { createBannerTrail, videoTrailFrameCount } from './banner-trail.js';
 import { createFrameSeeker } from './frame-seeker.js';
 import { createPoseOverlay } from './pose-overlay.js';
@@ -41,8 +42,6 @@ export async function mountViewer(root, copy, { priorityReady } = {}) {
   player.setAttribute('aria-label', copy.after);
   const screens = make('div', undefined, 'comparison-screens');
   const loadingOverlay = make('div', copy.loading, 'video-loading');
-  const loadButton = make('button', copy.loadVideo, 'video-load-button');
-  loadButton.type = 'button'; loadButton.hidden = true;
   screens.append(loadingOverlay);
   const canvases = [];
   const selected = new Set(['joint:right_wrist','joint:golf_club_head']);
@@ -78,7 +77,7 @@ export async function mountViewer(root, copy, { priorityReady } = {}) {
       refreshTrailSelection();
     }, { fullBody: true });
     overlays.push(overlay);
-    panel.append(heading, viewport);
+    panel.append(viewport);
     screens.append(panel);
     canvases.push(canvas);
   }
@@ -303,37 +302,10 @@ export async function mountViewer(root, copy, { priorityReady } = {}) {
     slider.max = String(clip.frameCount - 1); updateFrameLabel();
     for (const canvas of canvases) canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
     for (const button of list.querySelectorAll('button')) button.setAttribute('aria-pressed', String(button.dataset.key === clip.key));
-    function loadVideo(url) { return new Promise((resolve, reject) => {
-      let unlockPlayback = false;
-      const promptTimer = setTimeout(() => {
-        loadButton.hidden = false;
-        loadingOverlay.replaceChildren(loadButton);
-      }, 3000);
-      const cleanup = () => {
-        clearTimeout(promptTimer); loadButton.hidden = true; loadButton.onclick = null;
-        video.removeEventListener('loadeddata', loaded); video.removeEventListener('error', failed);
-        video.removeEventListener('canplay', loaded);
-        signal.removeEventListener('abort', aborted);
-      };
-      const loaded = () => {
-        if (video.readyState < 2) return;
-        if (unlockPlayback) video.pause();
-        video.preload = backgroundReady ? 'auto' : 'metadata'; cleanup(); resolve();
-      };
-      const failed = () => { cleanup(); reject(new Error('Video could not load')); };
-      const aborted = () => { cleanup(); reject(new DOMException('Aborted', 'AbortError')); };
-      // Some mobile browsers defer decoding until a direct user gesture.
-      loadButton.onclick = () => {
-        unlockPlayback = true; backgroundReady = true; video.preload = 'auto';
-        video.play().then(loaded).catch(error => { console.warn('Tap-to-load playback was blocked', error); });
-      };
-      video.addEventListener('loadeddata', loaded, { once: true });
-      video.addEventListener('canplay', loaded);
-      video.addEventListener('error', failed, { once: true });
-      signal.addEventListener('abort', aborted, { once: true });
-      // Buffer the selected clip in the background; never preload the full list.
-      video.preload = backgroundReady ? 'auto' : 'metadata'; video.src = url; video.load();
-    }); }
+    const loadVideo = url => loadVideoFrame(video,url,{signal,onBlob:local=>{
+      if(videoBlobURL) URL.revokeObjectURL(videoBlobURL);
+      videoBlobURL=local;
+    }});
     const mediaReady = (async () => {
       await loadVideo(clip.video);
       if (current !== version) return;

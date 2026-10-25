@@ -131,13 +131,15 @@ export async function mountBanner(root, settings, copy) {
     sync();
   });
   video.addEventListener('error',()=>{cancel(); restorePoster();});
+  video.addEventListener('canplay',sync);
+  document.addEventListener('pointerdown',sync,{passive:true});
   document.addEventListener('visibilitychange',sync);
-  const observer=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;sync();}); observer.observe(root);
+  const observer=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;video.autoplay=visible&&wanted;sync();}); observer.observe(root);
   // Do not download video/poses when opening directly at a lower section.
   await new Promise(resolve=>{
     const visibility=new IntersectionObserver(entries=>{
       if(entries.some(entry=>entry.isIntersecting)) { visibility.disconnect(); resolve(); }
-    });
+    },{rootMargin:root.classList.contains('project-preview')?'500px':'0px'});
     visibility.observe(root);
   });
   // Preview and skeleton are already present; fetch motion and poses together.
