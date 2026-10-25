@@ -106,12 +106,14 @@ async function renderPage() {
     if (content.projects) {
       const cards=element('div',undefined,'project-cards');
       for(const project of content.projects) {
-        const card=element('article',undefined,'project-card');
+        const card=element('a',undefined,'project-card');
+        card.href=project.url;
+        card.setAttribute('aria-label','View '+project.title);
         const media=element('div',undefined,'hero-banner project-preview');
         media.setAttribute('aria-label',project.title+' preview');
         media.inert=true;
         const text=element('div',undefined,'project-copy');
-        const heading=element('h3'); const link=element('a',project.title);link.href=project.url;heading.append(link);
+        const heading=element('h3',project.title);
         text.append(heading,element('p',project.summary));
         card.append(media,text);cards.append(card);
         requestAnimationFrame(()=>import('./hero-banner.js').then(m=>m.mountBanner(media,project.banner,demoCopy)).catch(()=>{media.textContent='Preview unavailable';}));

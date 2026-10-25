@@ -427,3 +427,9 @@ header[data-expanded=false] { width: 0; padding-inline: 0; border: 0; }
 .snapshot-demo[data-ready=false] .snapshot-image-window { opacity:0; }
 .snapshot-demo .snapshot-image-window { transition:opacity 180ms ease; }
 @media(prefers-reduced-motion:reduce) { .snapshot-demo .snapshot-image-window { transition:none; } }
+
+/* The full project card navigates; its embedded animation stays passive. */
+a.project-card { color:inherit; text-decoration:none; }
+a.project-card:hover { color:inherit; text-decoration:none; border-color:var(--accent); }
+a.project-card h3 { color:var(--accent); }
+a.project-card:focus-visible { outline:2px solid var(--accent); outline-offset:4px; }
