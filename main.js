@@ -108,6 +108,9 @@ async function renderPage() {
       for(const project of content.projects) {
         const card=element('a',undefined,'project-card');
         card.href=project.url;
+        card.addEventListener('click',()=>{
+          try {sessionStorage.setItem('golf-overview-return-scroll',String(window.scrollY));} catch {}
+        });
         card.setAttribute('aria-label','View '+project.title);
         const media=element('div',undefined,'hero-banner project-preview');
         media.setAttribute('aria-label',project.title+' preview');
@@ -160,12 +163,23 @@ async function renderPage() {
   }
   document.querySelector('#app').replaceChildren(backdrop, navigationToggle, header, main, element('footer', page.footer));
   const initialHash=location.hash;
+  let returnScroll=null;
+  if(initialHash==='#projects') {
+    try {
+      const saved=sessionStorage.getItem('golf-overview-return-scroll');
+      if(saved!==null && Number.isFinite(Number(saved))) returnScroll=Number(saved);
+    } catch {}
+  }
+  const restorePosition=()=>{
+    if(returnScroll!==null) window.scrollTo({top:returnScroll,behavior:'instant'});
+    else document.getElementById(initialHash.slice(1))?.scrollIntoView();
+  };
   let interacted=false;
   for(const event of ['wheel','touchstart','pointerdown','keydown']) document.addEventListener(event,()=>{interacted=true;},{once:true,passive:true});
   const restoreAnchor=()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{
-    if(initialHash&&location.hash===initialHash&&!interacted) document.getElementById(initialHash.slice(1))?.scrollIntoView();
+    if(initialHash&&location.hash===initialHash&&!interacted) restorePosition();
   }));
-  if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
+  if (initialHash) restorePosition();
   // Banner gets the landing-page bandwidth. Once it leaves the viewport,
   // warm snapshots and low-priority video concurrently, without waiting for Results.
   requestAnimationFrame(() => requestAnimationFrame(() => {
