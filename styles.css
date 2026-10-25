@@ -433,3 +433,25 @@ a.project-card { color:inherit; text-decoration:none; }
 a.project-card:hover { color:inherit; text-decoration:none; border-color:var(--accent); }
 a.project-card h3 { color:var(--accent); }
 a.project-card:focus-visible { outline:2px solid var(--accent); outline-offset:4px; }
+
+/* Keep project copy readable and playback controls tappable on phones. */
+@media (max-width:650px) {
+  .project-cards { grid-auto-rows:1fr; }
+  .project-card { grid-template-columns:112px minmax(0,1fr); }
+  .project-card .project-preview { width:112px; height:112px; }
+  .project-copy { min-width:0; }
+  .playback-controls { gap:4px; }
+  .playback-controls button { width:44px; height:44px; flex:0 0 44px; }
+  .zoom-controls { flex-wrap:wrap; }
+  .zoom-controls button { min-height:44px; }
+}
+@media (max-width:360px) {
+  .project-card { grid-template-columns:96px minmax(0,1fr); }
+  .project-card .project-preview { width:96px; height:96px; }
+  .project-copy { padding:12px 10px; }
+  .demo { padding:10px; }
+  .hero { padding-inline:14px; }
+}
+.project-cards { grid-auto-rows:1fr; }
+
+@media(max-width:360px) { .hero h1 {font-size:28px;overflow-wrap:anywhere;} .hero .eyebrow {overflow-wrap:anywhere;} }
