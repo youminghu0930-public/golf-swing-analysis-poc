@@ -14,7 +14,7 @@
     },
     "mainPage": {
       "label": "Return to main page",
-      "url": "https://you-ming-hu.github.io/"
+      "url": ""
     },
     "footer": "Golf swing analysis · Proof of concept"
   },
@@ -55,7 +55,7 @@
         {
           "title": "Improving Golf Swing Pose Estimation",
           "summary": "Body rotation and unusual swing positions challenge general-purpose pose models. Golf-specific improvements strengthen the body tracking that downstream analysis depends on.",
-          "url": "https://you-ming-hu.github.io/improving-golf-swing-pose-estimation/",
+          "url": "https://youminghu0930-public.github.io/improving-golf-swing-pose-estimation/",
           "banner": {
             "video": "face-on-0026-2",
             "label": "Improving Golf Swing Pose Estimation",
@@ -462,7 +462,7 @@
         {
           "title": "Integrating Golfer and Club Detection",
           "summary": "Separate detections leave an incomplete picture of the swing. Bringing body and club information into one pipeline makes their movement easier to interpret together.",
-          "url": "https://you-ming-hu.github.io/integrating-golfer-club-detection-models/",
+          "url": "https://youminghu0930-public.github.io/integrating-golfer-club-detection-models/",
           "banner": {
             "video": "face-on-0018",
             "label": "Integrating Golfer and Club Detection",
@@ -858,7 +858,7 @@
         {
           "title": "Enhancing Blurry Club Recall",
           "summary": "Fast club motion can blur the club head and cause missed detections. Targeted improvements recover more of this difficult motion for subsequent analysis.",
-          "url": "https://you-ming-hu.github.io/enhancing-blurry-club-recall/",
+          "url": "https://youminghu0930-public.github.io/enhancing-blurry-club-recall/",
           "banner": {
             "video": "down-the-line-0026-1",
             "label": "Enhancing Blurry Club Recall",
@@ -1501,7 +1501,7 @@
         {
           "title": "Trajectory Postprocessing",
           "summary": "Frame-by-frame predictions can produce jittery motion traces. Sequence-based reconstruction reduces instability while preserving the sharp movement around impact.",
-          "url": "https://you-ming-hu.github.io/trajectory-postprocessing/",
+          "url": "https://youminghu0930-public.github.io/trajectory-postprocessing/",
           "banner": {
             "video": "down-the-line-0028",
             "label": "Trajectory Postprocessing",
