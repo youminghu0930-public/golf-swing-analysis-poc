@@ -71,7 +71,7 @@ async function renderPage() {
     banner.setAttribute('role', 'group'); banner.setAttribute('aria-label', page.banner.label);
     hero.append(banner);
     requestAnimationFrame(()=>requestAnimationFrame(()=>{
-      import('./hero-banner.js').then(module=>module.mountBanner(banner,page.banner,demoCopy)).catch(error=>{
+      import('./hero-banner.js').then(module=>module.mountBanner(banner,{...page.banner,stableLoading:true},demoCopy)).catch(error=>{
         console.warn('Banner unavailable',error);
       });
     }));
@@ -171,10 +171,20 @@ async function renderPage() {
       let releaseBackground;
       const backgroundStart = new Promise(resolve => { releaseBackground=resolve; });
       const start = createDemoLoader(demos, async ({ demo, copy, modulePath, mount, error: errorText }, options) => {
-        try { const module = await import(modulePath); await module[mount](demo, copy, {...options,onFirstReady:restoreAnchor}); }
+        try { const module = await import(modulePath); await module[mount](demo, copy, {...options,onFirstReady:()=>{options.onFirstReady?.();restoreAnchor();}}); }
         catch (error) { console.error(error); demo.replaceChildren(element('p', errorText, 'demo-loading')); }
       }, backgroundStart);
       start();
+      // Warm Results even when the hero remains on screen or scroll observers
+      // are delayed; scrolling near Results can promote it immediately.
+      const fallback=setTimeout(releaseBackground,1200);
+      const result=main.querySelector('#result');
+      if(result) {
+        const nearResults=new IntersectionObserver(entries=>{
+          if(entries.some(entry=>entry.isIntersecting)) {clearTimeout(fallback);releaseBackground();nearResults.disconnect();}
+        },{rootMargin:'600px'});
+        nearResults.observe(result);
+      }
       if (!hero.querySelector('.hero-banner')) { releaseBackground(); return; }
       const observer = new IntersectionObserver(entries => {
         if (entries.some(entry => !entry.isIntersecting && entry.boundingClientRect.bottom <= 0)) {

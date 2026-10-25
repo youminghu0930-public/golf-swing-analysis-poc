@@ -422,3 +422,8 @@ header[data-expanded=false] { width: 0; padding-inline: 0; border: 0; }
 
 /* Preserve anatomical side colors supplied by the skeleton renderer. */
 .snapshot-demo .pose-overlay .joint-dot { display: block; }
+
+/* Reveal the fixed snapshot as one composed image, never floating overlays. */
+.snapshot-demo[data-ready=false] .snapshot-image-window { opacity:0; }
+.snapshot-demo .snapshot-image-window { transition:opacity 180ms ease; }
+@media(prefers-reduced-motion:reduce) { .snapshot-demo .snapshot-image-window { transition:none; } }

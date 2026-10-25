@@ -90,6 +90,10 @@ export async function mountBanner(root, settings, copy) {
   const tick=(now,metadata)=>{
     callback=undefined;
     presentedTime=metadata?.mediaTime??video.currentTime;
+    if(settings.stableLoading && loaded && !video.paused) {
+      if(!poster.hidden && motionPose) {overlay.setPose(motionPose,clip.width,clip.height);fitOverlay();}
+      poster.hidden=true;video.dataset.ready='true';
+    }
     draw(presentedTime);
     if(!video.paused) schedule();
   };
@@ -104,7 +108,7 @@ export async function mountBanner(root, settings, copy) {
   const sync=()=>{
     if(loaded&&video.readyState>=2&&visible&&!document.hidden&&wanted) {
       if(playPending||!video.paused) return;
-      poster.hidden=true; if(motionPose) {overlay.setPose(motionPose,clip.width,clip.height);fitOverlay();} draw(presentedTime); video.dataset.ready='true';
+      if(!settings.stableLoading) poster.hidden=true; if(motionPose) {overlay.setPose(motionPose,clip.width,clip.height);fitOverlay();} draw(presentedTime); video.dataset.ready='true';
       playPending=video.play().catch(()=>{
         if(video.paused) restorePoster();
       }).finally(()=>{playPending=undefined;});
