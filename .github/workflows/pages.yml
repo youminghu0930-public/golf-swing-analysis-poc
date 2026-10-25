@@ -1,0 +1,54 @@
+name: Build and deploy GitHub Pages
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Check out source and committed materials
+        uses: actions/checkout@v6
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Install FFmpeg and ffprobe
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Test
+        run: node --test tests/*.test.mjs
+      - name: Build site and media from source
+        run: node scripts/build-site.mjs
+      - name: Verify published asset paths
+        run: node scripts/verify-site.mjs
+      - name: Upload built site
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
