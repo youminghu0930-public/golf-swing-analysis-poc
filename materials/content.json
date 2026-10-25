@@ -1,9 +1,9 @@
 {
   "page": {
-    "title": "From Golf Swings to Scalable Motion Analysis",
-    "description": "An RGB-camera proof of concept for making movement analysis more accessible, starting with golf.",
-    "eyebrow": "Computer vision · Business case",
-    "role": "A focused golf proof of concept. A repeatable path toward accessible motion analysis.",
+    "title": "Golf Swing Analysis with RGB Video",
+    "description": "An applied computer-vision project connecting pose estimation, body and club detection, data augmentation, and trajectory reconstruction into a foundation for accessible golf swing analysis.",
+    "eyebrow": "Computer vision · Applied research",
+    "role": "My work: golf-specific pose estimation, unified body and club detection, targeted data augmentation, and trajectory reconstruction.",
     "navigationLabel": "Project sections",
     "navigationToggle": "Toggle section navigation",
     "banner": {
@@ -22,40 +22,41 @@
   "sections": [
     {
       "id": "overview",
-      "title": "Executive Summary",
+      "title": "Abstract",
       "paragraphs": [
-        "Reliable movement analysis can help people improve performance, support rehabilitation, and understand how the body moves. Specialized capture equipment, controlled spaces, and expert setup can make it difficult to deliver broadly. This project explores a more accessible approach: extracting useful motion information from RGB video, starting with golf as a focused proof of concept.",
-        "Four connected projects improve body tracking, integrate golfer and club detection, recover blurred clubs, and stabilize trajectories—building a reusable foundation for video-based analysis."
+        "Useful movement analysis depends on reliable motion capture, but specialized equipment, calibration, and controlled recording spaces can make it costly and difficult to deploy broadly. I used golf as a focused proof of concept for a more accessible RGB-video approach, addressing the detection failures that prevent ordinary footage from becoming useful movement information.",
+        "My work connects four tasks: improving golf-specific body tracking, unifying golfer and club detection, recovering blurred club heads, and reconstructing smoother trajectories. Together, they form a perception and postprocessing pipeline that makes body and club motion easier to inspect, including challenging sequences with rotation, blur, occlusion, and movement beyond the frame."
       ],
       "snapshots": true
     },
     {
       "id": "opportunity",
-      "title": "Business Opportunity",
+      "title": "Introduction",
       "paragraphs": [
-        "Motion analysis creates value when it turns movement into information someone can use: a coach identifying a swing issue, a practitioner monitoring exercise, or an operator reviewing a physical task.",
-        "Marker-based capture can involve dedicated cameras, calibration, space, careful marker placement, and manual cleanup. Clothing and attachment requirements can add friction for the person being recorded. These demands make routine use and expansion across locations difficult.",
-        "The opportunity is to reduce the equipment and expertise needed to obtain useful movement information. RGB video offers a practical route toward more accessible services built around the requirements of each application."
-      ]
-    },
-    {
-      "id": "why-golf",
-      "title": "Golf as a Proof of Concept",
-      "paragraphs": [
-        "Golf combines a focused capture setup with demanding motion. Common face-on and down-the-line views constrain the recording conditions, and a single golfer lets the initial work concentrate on detection. Existing coaching practices provide a vocabulary for interpreting movement.",
-        "Body rotation, unusual poses, occlusion, and rapid club motion still create difficult visual problems. Solving these within a defined workflow makes golf a useful proof of concept and establishes a development pattern to apply elsewhere."
+        "Movement analysis can support coaching, performance improvement, and progress tracking. Its practical value depends on capturing the movements that matter consistently enough to interpret them. When a joint shifts between frames or a club disappears near impact, subsequent measurements inherit those errors.",
+        "Marker-based capture can provide precise movement information, but its deployment may involve dedicated cameras, space, calibration, careful marker placement, and manual cleanup. These requirements create friction for routine use and expansion across locations. RGB video offers a more accessible capture method, but obtaining dependable body and equipment detections remains a central challenge."
+      ],
+      "subsections": [
+        {
+          "title": "Why golf was the starting point",
+          "paragraphs": [
+            "Golf combines a focused recording setup with demanding movement. Face-on and down-the-line views provide established perspectives for analysis, while a single golfer keeps the initial task centered on body and club detection. Existing coaching practices also provide a vocabulary for discussing the resulting motion.",
+            "Golf remains visually challenging: rotation hides body joints, unusual poses challenge general-purpose models, and rapid club movement creates blur and missing detections. I focused on these perception problems first, establishing the information needed before adding downstream measurements or coaching features."
+          ]
+        }
       ]
     },
     {
       "id": "projects",
-      "title": "Technical Approach",
+      "title": "Methods",
       "paragraphs": [
-        "Useful feedback starts with dependable movement information. These projects address successive points where raw footage can lose that information."
+        "I treated swing analysis as a connected pipeline rather than a collection of independent detections. Body tracking provides the golfer’s movement context; unified body and club prediction connects that context to the equipment; targeted augmentation improves coverage of difficult blurred frames; and sequence-level postprocessing turns unstable predictions into more consistent trajectories.",
+        "The four linked projects describe the implementation in detail. Together, they address data coverage, model integration, difficult-case recall, and temporal consistency—the successive requirements for turning video into usable motion information."
       ],
       "projects": [
         {
           "title": "Improving Golf Swing Pose Estimation",
-          "summary": "Body rotation and unusual swing positions challenge general-purpose pose models. Golf-specific improvements strengthen the body tracking that downstream analysis depends on.",
+          "summary": "Golf-specific rotation and occlusion exposed weaknesses in general-purpose pose models. I led targeted annotation and developed the training and mobile-conversion pipeline to improve difficult-pose tracking with a lightweight model.",
           "url": "https://youminghu0930-public.github.io/improving-golf-swing-pose-estimation/",
           "banner": {
             "video": "face-on-0026-2",
@@ -462,7 +463,7 @@
         },
         {
           "title": "Integrating Golfer and Club Detection",
-          "summary": "Separate detections leave an incomplete picture of the swing. Bringing body and club information into one pipeline makes their movement easier to interpret together.",
+          "summary": "Separate golfer and club models created a fragile integration step. I revised data preparation and annotation-aware training so one keypoint model could learn both targets from incompletely labeled datasets.",
           "url": "https://youminghu0930-public.github.io/integrating-golfer-club-detection-models/",
           "banner": {
             "video": "face-on-0018",
@@ -858,7 +859,7 @@
         },
         {
           "title": "Enhancing Blurry Club Recall",
-          "summary": "Fast club motion can blur the club head and cause missed detections. Targeted improvements recover more of this difficult motion for subsequent analysis.",
+          "summary": "Fast motion made blurred club heads difficult to detect. I combined segmentation with heuristic blur synthesis to expand difficult training examples and improve recall without changing the detector architecture.",
           "url": "https://youminghu0930-public.github.io/enhancing-blurry-club-recall/",
           "banner": {
             "video": "down-the-line-0026-1",
@@ -1501,7 +1502,7 @@
         },
         {
           "title": "Trajectory Postprocessing",
-          "summary": "Frame-by-frame predictions can produce jittery motion traces. Sequence-based reconstruction reduces instability while preserving the sharp movement around impact.",
+          "summary": "Frame-by-frame predictions produced jittery trajectories. I developed a sequence model trained on synthetic motion and realistic detection noise to stabilize body and club paths while retaining sharp impact behavior.",
           "url": "https://youminghu0930-public.github.io/trajectory-postprocessing/",
           "banner": {
             "video": "down-the-line-0028",
@@ -2195,26 +2196,42 @@
       "id": "result",
       "title": "Results",
       "paragraphs": [
-        "Explore body and club tracking in a single view. Play a swing or step through individual frames; select joints to inspect their motion trails."
+        "The work produced a connected representation of golfer and club motion with improved coverage of difficult poses and blurred club heads, followed by smoother trajectories. The examples show wrist and club-head movement through the swing, reconstruction beyond the image boundary, and more consistent motion through body occlusion while retaining the transition around impact.",
+        "The component projects reported distinct improvements: golf-specific pose estimation resolved approximately 80% of the difficult examples assessed; unified detection improved heavily blurred club recall by around 50% relative to the earlier two-model pipeline; targeted augmentation improved difficult blurred-club recall by approximately 30% relative to its previous detector; and trajectory reconstruction resolved approximately 80% of the jittery cases evaluated. Each result describes its own task and comparison.",
+        "The video below brings the resulting body pose and club motion into one view. Play a swing or step through frames to inspect the sequence."
       ]
     },
     {
       "id": "future",
-      "title": "Expansion Strategy",
+      "title": "Discussion",
       "paragraphs": [
-        "The repeatable pattern is to choose a valuable movement, define the capture conditions, improve detection, and turn the resulting information into a domain-specific service. Other sports, exercise and rehabilitation monitoring, workplace ergonomics, animation, and human–robot interaction offer potential applications. Each has its own capture and precision requirements."
+        "This project links a practical capture problem to a broader product opportunity: reducing the equipment and setup required to obtain useful movement information. The technical work establishes the perception foundation; the business value comes from fitting that foundation into a workflow people can use repeatedly."
       ],
       "subsections": [
         {
-          "title": "Business models",
+          "title": "From a working pipeline to a useful service",
           "paragraphs": [
-            "A consumer subscription could support recurring swing review. Tools for coaches, academies, and simulator operators could support more efficient analysis and progress tracking. Partners could embed the experience in their own services through a B2B2C offering, while an API or SDK could make the perception pipeline available to other products."
+            "Accessible capture alone does not make an analysis service useful. Recording guidance, understandable output, and a clear connection to a user’s task are equally important. For golf, a focused service could help coaches review swings and track changes over time, or help training facilities add movement analysis to an existing customer experience.",
+            "A pilot with coaches or training facilities would be a practical next step. It would connect the pipeline to repeat usage and expert interpretation, with attention to recording effort, review time, and whether the output helps users make a meaningful decision."
           ]
         },
         {
-          "title": "The next step",
+          "title": "Business models",
           "paragraphs": [
-            "A focused pilot with coaches or training facilities would connect the technology to repeat usage and expert feedback. The commercial priorities are a simple recording process, understandable output, less review effort, and a service customers find useful enough to return to."
+            "A B2B offering could provide analysis tools to coaches, academies, and simulator operators. B2B2C partnerships could integrate the same capability into a provider’s customer service. A consumer subscription could support recurring personal review, while an API or SDK could let other products incorporate the perception pipeline. The initial model should follow the workflow where the system delivers the clearest value."
+          ]
+        },
+        {
+          "title": "Expansion beyond golf",
+          "paragraphs": [
+            "The reusable asset is both the pipeline and the development approach: choose a valuable movement, define capture conditions, address domain-specific detection failures, and connect the output to an established task. Potential applications include other sports, exercise and rehabilitation monitoring, workplace ergonomics, animation, and human–robot interaction.",
+            "Expansion would require adapting data, joint definitions, equipment detection, and precision requirements to each application. Golf provides a starting point for that process; it does not make every movement domain interchangeable."
+          ]
+        },
+        {
+          "title": "Future work",
+          "paragraphs": [
+            "The next technical priorities are to connect stable keypoints to domain-specific measurements, make recording requirements clear to users, and develop repeatable checks for changes in upstream models. A shared data and evaluation workflow would support continued iteration while preserving the behavior that matters for each application."
           ]
         }
       ]
@@ -2223,8 +2240,8 @@
       "id": "takeaway",
       "title": "Conclusion",
       "paragraphs": [
-        "Golf is the first application of a broader idea: making useful motion analysis accessible through RGB video. The four projects tackle the perception and trajectory problems between raw footage and usable movement information.",
-        "The business opportunity is a repeatable service model that reduces capture friction, delivers value within a focused workflow, and expands into other movement-based applications."
+        "I approached accessible golf swing analysis through four connected problems: pose coverage, body and club integration, blurred-object recall, and trajectory consistency. The resulting work connects model and data development with a usable visual representation of movement from RGB video.",
+        "Golf demonstrates the technical foundation and provides a focused setting for a service pilot. The broader opportunity is to repeat this development pattern in other movement-based workflows, adapting the technology to a specific customer need before expanding further."
       ]
     }
   ],
