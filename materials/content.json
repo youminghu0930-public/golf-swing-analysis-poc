@@ -17,7 +17,8 @@
       "label": "Return to main page",
       "url": ""
     },
-    "footer": "Golf swing analysis · Proof of concept"
+    "footer": "Golf swing analysis · Proof of concept",
+    "projectLinkLabel": "View project →"
   },
   "sections": [
     {

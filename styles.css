@@ -465,3 +465,8 @@ a.project-card:focus-visible { outline:2px solid var(--accent); outline-offset:4
  .project-copy p { font-size:14px; line-height:1.55; }
 }
 
+
+/* A quiet navigation cue makes the whole-card link clear on touch screens. */
+.project-copy { display:flex; flex-direction:column; align-self:stretch; }
+.project-link-label { align-self:flex-end; margin-top:auto; padding-top:14px; color:var(--accent); font-size:12px; font-weight:500; line-height:1.5; white-space:nowrap; }
+a.project-card:hover .project-link-label, a.project-card:focus-visible .project-link-label { text-decoration:underline; text-underline-offset:3px; }

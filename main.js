@@ -117,7 +117,7 @@ async function renderPage() {
         media.inert=true;
         const text=element('div',undefined,'project-copy');
         const heading=element('h3',project.title);
-        text.append(heading,element('p',project.summary));
+        text.append(heading,element('p',project.summary),element('span',page.projectLinkLabel,'project-link-label'));
         card.append(media,text);cards.append(card);
         requestAnimationFrame(()=>import('./hero-banner.js').then(m=>m.mountBanner(media,project.banner,demoCopy)).catch(()=>{media.textContent='Preview unavailable';}));
       }
