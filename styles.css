@@ -517,3 +517,11 @@ a.project-card:hover .project-link-label, a.project-card:focus-visible .project-
 .section-info .snapshot-info-panel { top: calc(100% + 6px); bottom: auto; left: 0; right: auto; width: 320px; max-width: 100%; transform-origin: top left; clip-path: inset(0 100% 100% 0 round 12px); }
 .section-info .snapshot-info-panel.is-open { clip-path: inset(0 round 12px); }
 @media(pointer:coarse) { .section-info { flex-basis: 44px; } .section-info .snapshot-info-button { width: 44px; height: 44px; } }
+
+/* Mobile playback follows the original stacked controls shown in the reference. */
+@media (max-width:760px) {
+  .player-control-row { display:block; margin-top:0; padding-top:0; }
+  .player-control-row .player-meta { min-height:20px; font-size:12px; }
+  .player-control-row .playback-controls { justify-content:center; gap:clamp(4px,2vw,12px); margin:12px 0 24px; }
+  .player-control-row .playback-controls button { width:44px; height:44px; flex:0 0 44px; }
+}
