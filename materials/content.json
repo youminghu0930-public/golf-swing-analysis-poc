@@ -2328,6 +2328,37 @@
       "golf_club_shaft": "Club shaft",
       "golf_club_heel": "Club heel",
       "golf_club_head": "Club head"
-    }
+    },
+    "instructionsLabel": "Video instructions",
+    "instructions": [
+      {
+        "gesture": "Scroll or pinch",
+        "action": "Zoom in or out."
+      },
+      {
+        "gesture": "Drag when zoomed in",
+        "action": "Pan the image."
+      },
+      {
+        "gesture": "Space",
+        "action": "Play or pause."
+      },
+      {
+        "gesture": "Left / right arrow",
+        "action": "Tap for one frame; hold to repeat."
+      },
+      {
+        "gesture": "Hover",
+        "action": "Inspect a joint or connection."
+      },
+      {
+        "gesture": "Click",
+        "action": "Select a single joint or connection."
+      },
+      {
+        "gesture": "Shift-click",
+        "action": "Select multiple joints or connections."
+      }
+    ]
   }
 }
